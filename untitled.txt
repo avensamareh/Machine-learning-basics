@@ -1,0 +1,101 @@
+select distinct year, count(bikes), count(*), count(distinct position), max(salary) 
+from car
+where (production_year = 1999 ) and (name like '%A') and (price is not null) and (brand is null)
+      (difficulty in (12,3))
+order by salary asc
+
+
+# * all columns
+# where a condition for columns to select few of the rows = a condition for a value in column, ex: where each department be IT
+# %A ends with A, A% starts with A, %A% has A
+# distict  = np.nunique
+# count() count the number of rows
+# max = highest salary
+# count(*) = total number of sth in the entore row
+# GROUP BY will group together all rows having the same value in the specified column.
+# GROUP BY = for each specific item in a column
+# HAVING SUM(total_sum) == its a condition for the select
+# INNER JOIN (or JOIN, for short) only shows those rows from the two tables where there is a match between the columns.
+
+# LEFT JOIN works in the following way: it returns all rows from the left table (the first table in the query) plus all matching rows from the right table (the second table in the query).
+
+ where = condition for a column that actually exist where dept = 'IT
+ having by = confition for selection or a column that doesnt exist having by count(dept)>2,
+ group by from select
+ 
+# intersect and union are both joining tables
+
+
+select suppliers.supplier_id,suppliers.company_name,
+       count(distinct products.product_name)
+
+from suppliers 
+join products
+on suppliers.supplier_id = products.supplier_id
+group by suppliers.supplier_id
+having  count(distinct products.product_name)>=4
+
+select p.product_name,
+       o.unit_price  ,
+       o.quantity ,
+       s.company_name  
+       
+from products as p
+join suppliers as s
+on p.supplier_id =s.supplier_id
+join  order_items as o
+on o.product_id = p.product_id
+where o.order_id = 10248
+
+
+6/19
+select products.product_name, categories.category_name,
+case
+when products.product_name in (categories.category_name) then 'Non-vegetarian'
+when categories.category_name = 'seafood' then 'Meat/Poultry'
+else 'Vegetarian'
+end as diet_type
+
+from products
+join categories
+on products.category_id =categories.category_id
+
+10/19select 
+count(
+  case
+  when  ship_region = 'WA' then 'orders_wa_employees'
+  end 
+  )as orders_wa_employees,
+count(
+  case
+  when ship_region !='WA' then 'orders_not_wa_employees'
+  end
+ )as orders_not_wa_employees
+ 
+ from orders
+ 
+ select count( case
+            when (order_items.unit_price *order_items.quantity) 
+            and (orders.ship_country in( 'France')) then full_price
+            end) as full_price,
+       count( case 
+            when (order_items.unit_price *order_items.quantity *(1-order_items.discount)) and (orders.ship_country in( 'France')) then discount
+            end) as discount
+from order_items   
+join orders
+on order_items.order_id = orders.order_id
+ 
+ 
+ 17/19
+ select  order_id, 
+       (unit_price * quantity) as total_price,
+       case
+         when (unit_price * quantity) >= 2000 then 'high'
+         when (unit_price * quantity) between 600 and 2000 then 'average'
+         else 'low'
+         end as price_group
+         
+from order_items
+
+group by (unit_price * quantity),order_id
+ 
